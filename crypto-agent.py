@@ -49,14 +49,14 @@ def get_safe_nonce_from_service(safe_address):
     return response.json()["nonce"]
 
 # ===💸 INITIATE SAFE TRANSACTION ===
-def initiate_safe_tx(matic_amount, to_address):
-    matic_wei = int(float(matic_amount) * 10**18)
+def initiate_safe_tx(pol_amount, to_address):
+    pol_wei = int(float(pol_amount) * 10**18)
     safe_nonce = get_safe_nonce_from_service(SAFE_ADDRESS)
     print(f"Using Safe nonce: {safe_nonce}")
 
     tx = safe_instance.build_multisig_tx(
         to=to_address,
-        value=matic_wei,
+        value=pol_wei,
         data=b"",
         operation=0,
         safe_nonce=safe_nonce
@@ -150,11 +150,11 @@ def ai_guard(amount, recipient):
 
     prompt_text = f"""
     You are a blockchain wallet AI guard.
-    A user wants to send {amount} MATIC to {recipient}.
+    A user wants to send {amount} POL to {recipient}.
 
     Reply with only "yes" or "no" based on:
-    - If amount is ≤ 5 MATIC and the address does not look suspicious → say "yes"
-    - If amount is greater than 5 MATIC, or the address looks suspicious → say "no"
+    - If amount is ≤ 5 POL and the address does not look suspicious → say "yes"
+    - If amount is greater than 5 POL, or the address looks suspicious → say "no"
     - Addresses are suspicious if they are short, zero addresses, or match known blacklists.
     """
 
@@ -171,8 +171,8 @@ def ai_guard(amount, recipient):
 # ===📊 BALANCE COMMAND ===
 async def check_wallet_balance(update: Update, context: ContextTypes.DEFAULT_TYPE):
     balance = web3.eth.get_balance(SAFE_ADDRESS)
-    matic = web3.from_wei(balance, "ether")
-    await update.message.reply_text(f"🔹 Wallet Balance: {matic:.4f} MATIC")
+    pol = web3.from_wei(balance, "ether")
+    await update.message.reply_text(f"🔹 Wallet Balance: {pol:.4f} POL")
 
 # ===📤 SEND COMMAND ===
 async def handle_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -180,14 +180,14 @@ async def handle_send(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Usage: /send <amount> <wallet_address>")
         return
 
-    matic = context.args[0]
+    pol = context.args[0]
     to_addr = context.args[1]
 
-    decision = ai_guard(matic, to_addr)
+    decision = ai_guard(pol, to_addr)
 
     if decision == "yes":
         try:
-            tx_hash = initiate_safe_tx(matic, to_addr)
+            tx_hash = initiate_safe_tx(pol, to_addr)
             await update.message.reply_text(f"✅ Sent! TX Hash: {tx_hash}")
         except Exception as err:
             print("Error:", str(err))
@@ -201,7 +201,7 @@ async def handle_about(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🤖 *I am your AI Wallet Assistant on Polygon!*\n\n"
         "I can:\n"
         "🔹 Check your wallet balance with /balance\n"
-        "🔹 Send MATIC safely with AI verification using /send <amount> <wallet_address>\n\n"
+        "🔹 Send POL safely with AI verification using /send <amount> <wallet_address>\n\n"
         "🛡️ Every transaction is guarded by an AI rule system that checks for suspicious behavior.\n"
         "If it looks risky, I’ll stop it.\n"
         "\n_Stay safe out there!_"

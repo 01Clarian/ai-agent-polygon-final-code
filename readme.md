@@ -5,7 +5,8 @@ This project is a fully operational **Telegram AI Agent** that interacts with th
 ## 🚀 Overview
 This AI-powered Telegram bot allows users to:
 
-- Check the current MATIC balance of a Safe
+- Check the current python3 -m venv venv
+ balance of a Safe
 - Send MATIC from the Safe to another address
 - Automatically get approval or rejection from an AI guard before sending
 - Understand its own capabilities via `/about` and `/start`
@@ -38,6 +39,40 @@ OPENAI_KEY=your_openai_api_key
 
 ### 2. 📦 Install Requirements
 Create a virtual environment (recommended), then install:
+
+python3 -m venv venv
+source venv/bin/activate
+
+1. 🔧 Add pyenv to your shell config
+Run this:
+
+bash
+Copy
+Edit
+echo -e '\n# >>> pyenv setup >>>' >> ~/.zshrc
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
+echo 'eval "$(pyenv init --path)"' >> ~/.zshrc
+echo 'eval "$(pyenv init -)"' >> ~/.zshrc
+echo '# <<< pyenv setup <<<' >> ~/.zshrc
+Then apply it:
+
+bash
+Copy
+Edit
+source ~/.zshrc
+2. 💡 Confirm it's working
+Now try:
+
+bash
+Copy
+Edit
+pyenv versions
+python --version
+Your output should include * 3.11.8 and Python 3.11.8.
+
+
+
 ```bash
 pip install -r requirements.txt
 ```
